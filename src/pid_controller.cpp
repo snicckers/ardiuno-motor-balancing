@@ -188,10 +188,10 @@ void calculate_attitude(int sensor_data[]){
   angle_gyro_pitch += ((float)sensor_data[5] / modifier) * loop_time;
   /* The yaw of the gyro must be used to transfer
   the roll angle to pitch and vice versa.  */
-  // angle_gyro_roll +=
-  // angle_gyro_pitch * sin((sensor_data[6] / modifier) * degrees_to_rad * loop_time);
-  // angle_gyro_pitch -=
-  // angle_gyro_roll * sin((sensor_data[6] / modifier) * degrees_to_rad * loop_time);
+  angle_gyro_roll +=
+  angle_gyro_pitch * sin((sensor_data[6] / modifier) * degrees_to_rad * loop_time);
+  angle_gyro_pitch -=
+  angle_gyro_roll * sin((sensor_data[6] / modifier) * degrees_to_rad * loop_time);
 
   /*--- Complimentary FIlter --------------------*/
   /* Combine the sensor outputs & add the last gyro angle to the current one. */
@@ -282,8 +282,6 @@ void pid_controller(){
     pid_d = -75;
   }
 
-
-
   /* Sum the the components to find the final pid value. */
   pid = pid_p + pid_i + pid_d;
   if (pid > 350) {
@@ -344,10 +342,11 @@ void debugging(){
   // Serial.print(" ");
 
   /*--- Print ---*/
-  Serial.print(90);
-  Serial.print(" ");
-  Serial.print(-90);
-  Serial.print(" ");
+  // Serial.print("\n");
+  // Serial.print(90);
+  // Serial.print(" ");
+  // Serial.print(-90);
+  // Serial.print(" ");
 
   // Gyroscope output:
   // Serial.print("\n");
@@ -359,10 +358,11 @@ void debugging(){
   // Serial.print(" ");
   // Serial.print(angle_gyro_pitch);
   // Serial.print(" ");
-  //Serial.println(angle_roll);
-  //Serial.print(" ");
-  Serial.println(angle_pitch);
+  Serial.print(angle_roll);
   Serial.print(" ");
+  Serial.print(angle_pitch);
+  Serial.print("\n");
+
 }
 
 /*--- Setup ------------------------------------------------------------------*/
