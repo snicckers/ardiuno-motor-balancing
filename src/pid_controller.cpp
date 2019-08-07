@@ -45,7 +45,7 @@ float pid_p = 0, pid_i = 0, pid_d = 0;
 float k_p = 2.8;
 float k_i = 2.0;
 float k_d = 1.35;
-float desired_angle = 0;
+float desired_angle = 0.0;
 
 /*--- setup mpu --------------------------------------------------------------*/
 void setup_mpu(){
@@ -174,7 +174,7 @@ void calculate_attitude(int sensor_data[]){
 
   /*--- Correct initial angle errors ---*/
   acceleration_angle_roll += 0;
-  acceleration_angle_pitch += 0;
+  acceleration_angle_pitch += -2;
 
   /*--- Angle from Gyroscope -------------------------------------------------*/
   /* As the data giver from the gryoscope is angular velocity (degrees / sec) we
@@ -195,13 +195,13 @@ void calculate_attitude(int sensor_data[]){
 
   /*--- Complimentary FIlter --------------------*/
   /* Combine the sensor outputs & add the last gyro angle to the current one. */
-  float hpf = 0.97; // High Pass Filter
+  float hpf = 0.95; // High Pass Filter
   float lpf = 1.0 - hpf; // Low Pass Fbilter
 
   angle_roll =
-  hpf * (angle_gyro_roll) + lpf * acceleration_angle_roll;
+  hpf * ((angle_roll + angle_gyro_roll) / 2) + lpf * acceleration_angle_roll;
   angle_pitch =
-  hpf * (angle_gyro_pitch) + lpf * acceleration_angle_pitch;
+  hpf * ((angle_gyro_pitch + angle_gyro_pitch) / 2) + lpf * acceleration_angle_pitch;
 }
 
 /*--- Calibrate IMU ----------------------------------------------------------*/
